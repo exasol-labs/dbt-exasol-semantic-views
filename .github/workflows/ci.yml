@@ -22,16 +22,6 @@ jobs:
       matrix:
         # The oldest exasol-semantic-views release the package supports, and the newest.
         esv-ref: ["v0.6.1", "main"]
-    # The same database exasol-semantic-views tests against; it needs the
-    # shared memory, and does not boot on Docker's 64 MB default.
-    services:
-      exasol:
-        image: exasol/docker-db:latest-2026.1
-        ports:
-          - 8563:8563
-        options: >-
-          --privileged
-          --shm-size=2gb
     env:
       EXASOL_HOST: 127.0.0.1
       EXASOL_PORT: "8563"
@@ -58,8 +48,18 @@ jobs:
           python -m pip install -r esv/tools/requirements-osi.txt "dbt-exasol>=1.10"
           sudo apt-get update
           sudo apt-get install -y lua5.4
+      # The same database exasol-semantic-views tests against. Started here
+      # rather than as a service so there is room for it first: it needs a few
+      # GB for its data volume and refuses to boot without ("insufficient
+      # space"), and it needs shared memory beyond Docker's 64 MB default.
+      - name: Start Exasol
+        run: |
+          sudo rm -rf /usr/share/dotnet /usr/local/lib/android /opt/ghc /opt/hostedtoolcache/CodeQL
+          df -h /
+          docker run -d --name exasol --privileged --shm-size=2gb -p 8563:8563 \
+            exasol/docker-db:latest-2026.1
       - name: Wait for Exasol
-        run: python esv/tools/dev/wait_for_exasol.py
+        run: python esv/tools/dev/wait_for_exasol.py || { docker logs exasol | tail -40; exit 1; }
       - name: Install exasol-semantic-views
         run: python esv/tools/install.py
       - name: dbt build
