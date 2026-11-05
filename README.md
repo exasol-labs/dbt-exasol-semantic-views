@@ -35,6 +35,16 @@ packages:
     version: [">=0.1.0", "<0.2.0"]
 ```
 
+Or straight from GitHub, pinned to a release tag:
+
+```yaml
+packages:
+  - git: https://github.com/exasol-labs/dbt-exasol-semantic-views.git
+    revision: 0.1.0
+```
+
+Then `dbt deps`.
+
 ## Define a semantic model
 
 One model file per ESV model, materialized as `exasol_semantic_model`. The body
