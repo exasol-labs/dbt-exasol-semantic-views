@@ -1,0 +1,14 @@
+# Used by CI and local runs: DBT_PROFILES_DIR=. dbt build
+exasol_semantic_views_integration_tests:
+  target: ci
+  outputs:
+    ci:
+      type: exasol
+      threads: 1
+      dsn: "{{ env_var('EXASOL_DSN', 'localhost:8563') }}"
+      user: "{{ env_var('EXASOL_USER', 'sys') }}"
+      password: "{{ env_var('DBT_ENV_SECRET_EXASOL_PASSWORD', 'exasol') }}"
+      dbname: DB
+      schema: "{{ env_var('ESV_IT_SCHEMA', 'ESV_DBT_IT') }}"
+      encryption: true
+      validate_server_certificate: false

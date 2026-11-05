@@ -1,0 +1,22 @@
+version: 2
+
+models:
+  - name: esv_it_sales
+    description: The integration-test semantic model, rebuilt on every run.
+    data_tests:
+      - exasol_semantic_views.validates_clean
+      - exasol_semantic_views.agent_ready
+      - exasol_semantic_views.no_retired_views
+      - exasol_semantic_views.definition_unchanged
+
+  - name: it_revenue_by_region
+    description: Governed revenue per region, compiled through the structured request.
+    columns:
+      - name: customer_region
+        data_tests: [unique, not_null]
+
+  - name: it_delivered_by_region
+    description: Governed delivered revenue per region, compiled from Semantic SQL.
+    columns:
+      - name: customer_region
+        data_tests: [unique, not_null]

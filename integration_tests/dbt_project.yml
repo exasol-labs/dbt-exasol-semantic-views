@@ -1,0 +1,27 @@
+name: exasol_semantic_views_integration_tests
+version: '0.1.0'
+config-version: 2
+profile: exasol_semantic_views_integration_tests
+
+model-paths: ["models"]
+seed-paths: ["seeds"]
+test-paths: ["tests"]
+clean-targets: ["target", "dbt_packages"]
+
+seeds:
+  exasol_semantic_views_integration_tests:
+    it_orders:
+      +column_types:
+        net_amount: DECIMAL(18,2)
+
+models:
+  exasol_semantic_views_integration_tests:
+    silver:
+      +materialized: table
+    marts:
+      +materialized: table
+
+# Lets CI and the overrides tests exercise dispatch the way a user would.
+dispatch:
+  - macro_namespace: exasol_semantic_views
+    search_order: ["exasol_semantic_views_integration_tests", "exasol_semantic_views"]

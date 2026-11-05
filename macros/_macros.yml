@@ -1,0 +1,80 @@
+version: 2
+
+macros:
+  - name: relation_args
+    description: >
+      A relation as the two string arguments an admin script takes for a source,
+      `'SCHEMA', 'OBJECT'`. Use it with ref() wherever a script in a semantic
+      model's body names a source, so dbt records that the model reads it.
+    arguments:
+      - name: relation
+        type: relation
+        description: A relation, usually `ref('...')` or `source('...', '...')`.
+
+  - name: query
+    description: >
+      Compiles a structured request with COMPILE_REQUEST_JSON at run time and
+      returns the governed SQL, with each requested field as an upper-case
+      column. Put a `-- depends_on:` comment with a ref() to the semantic model in
+      the calling model, so it runs after the semantic model is built.
+    arguments:
+      - name: model
+        type: string
+        description: ESV model name.
+      - name: object
+        type: string
+        description: Semantic object (view) name.
+      - name: metrics
+        type: list[string]
+        description: Metrics to select.
+      - name: dimensions
+        type: list[string]
+        description: Dimensions to group by.
+      - name: filters
+        type: list[dict[str, any]]
+        description: "Filter items, e.g. `{'field': 'order_status', 'op': '=', 'value': 'COMPLETE'}`."
+      - name: having
+        type: list[dict[str, any]]
+        description: Metric predicates, in the filter item shape.
+      - name: order_by
+        type: list[dict[str, any]]
+        description: "Order items, e.g. `{'field': 'total_revenue', 'direction': 'desc'}`."
+      - name: limit
+        type: optional[integer]
+        description: Row limit.
+
+  - name: compile_sql
+    description: >
+      Compiles a Semantic SQL statement with COMPILE_SQL at run time and returns
+      the governed SQL. Column names are as the statement selects them.
+    arguments:
+      - name: semantic_sql
+        type: string
+        description: A Semantic SQL SELECT over a published semantic object.
+
+  - name: split_statements
+    description: >
+      Splits a semantic model body into statements on semicolons outside string
+      literals, quoted identifiers and comments; comments are dropped.
+      Dispatched, so a project can override it.
+    arguments:
+      - name: sql
+        type: string
+        description: The rendered model body.
+
+  - name: prepare_statement
+    description: >
+      Sends `ALTER SEMANTIC VIEW` through APPLY_SEMANTIC_DEFINITION_OR_FAIL, so it
+      needs no session preprocessor and a refusal raises; other statements pass
+      unchanged. Dispatched.
+    arguments:
+      - name: statement
+        type: string
+        description: One statement from the body.
+
+  - name: audit_relation
+    description: >
+      The table each build records the deployed model hash in, read by the
+      `definition_unchanged` test. Schema from
+      `var('exasol_semantic_views:audit_schema')`, default the target schema.
+      Dispatched.

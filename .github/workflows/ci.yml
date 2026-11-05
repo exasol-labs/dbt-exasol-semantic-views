@@ -1,0 +1,56 @@
+name: integration tests
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  integration:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        # The oldest exasol-semantic-views release the package supports, and the newest.
+        esv-ref: ["v0.6.1", "main"]
+    services:
+      exasol:
+        image: exasol/docker-db:latest
+        options: --privileged
+        ports: ["8563:8563"]
+    env:
+      EXASOL_DSN: localhost:8563
+      EXASOL_USER: sys
+      DBT_ENV_SECRET_EXASOL_PASSWORD: exasol
+      EXASOL_HOST: localhost
+      EXASOL_PORT: "8563"
+      EXASOL_PASSWORD: exasol
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Wait for the database
+        run: |
+          pip install pyexasol
+          for i in $(seq 1 60); do
+            python -c "import pyexasol; pyexasol.connect(dsn='localhost:8563', user='sys', password='exasol', encryption=True, websocket_sslopt={'cert_reqs': 0})" && exit 0
+            sleep 10
+          done
+          exit 1
+      - name: Install exasol-semantic-views ${{ matrix.esv-ref }}
+        run: |
+          git clone --depth 1 --branch "${{ matrix.esv-ref }}" https://github.com/exasol-labs/exasol-semantic-views esv
+          pip install -r esv/requirements.txt || true
+          python esv/tools/install.py
+      - name: Install dbt-exasol
+        run: pip install "dbt-exasol>=1.10"
+      - name: dbt build
+        working-directory: integration_tests
+        env:
+          DBT_PROFILES_DIR: .
+          ESV_IT_SCHEMA: ESV_DBT_IT_${{ github.run_number }}
+        run: |
+          dbt deps
+          dbt build

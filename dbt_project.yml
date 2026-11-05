@@ -1,0 +1,11 @@
+name: exasol_semantic_views
+version: '0.1.0'
+config-version: 2
+
+# dbt-exasol 1.12 pins dbt-core 1.12. The upper bound admits dbt v2 so the
+# package parses there (dbt Hub checks every tagged version), though no v2
+# Exasol adapter exists yet.
+require-dbt-version: [">=1.10.0", "<3.0.0"]
+
+macro-paths: ["macros"]
+clean-targets: ["target", "dbt_packages"]

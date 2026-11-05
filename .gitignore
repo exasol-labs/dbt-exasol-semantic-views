@@ -1,0 +1,9 @@
+target/
+dbt_packages/
+logs/
+integration_tests/target/
+integration_tests/dbt_packages/
+integration_tests/logs/
+integration_tests/package-lock.yml
+package-lock.yml
+.user.yml

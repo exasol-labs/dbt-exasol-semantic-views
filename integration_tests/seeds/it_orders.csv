@@ -1,0 +1,6 @@
+order_key,customer_key,order_status,net_amount
+10,1,delivered,100.00
+11,1,open,40.00
+12,2,delivered,250.00
+13,3,delivered,60.00
+14,3,cancelled,15.00
