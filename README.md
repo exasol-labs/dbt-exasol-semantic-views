@@ -1,7 +1,19 @@
-# exasol_semantic_views
+<div align="center">
 
-Build, test and query an [Exasol Semantic Views](https://github.com/exasol-labs/exasol-semantic-views)
-semantic layer from dbt.
+<h1>exasol_semantic_views</h1>
+
+<p><em>A dbt package for <a href="https://github.com/exasol-labs/exasol-semantic-views">Exasol Semantic Views</a>.<br>Build, validate, publish, test and query a governed semantic layer — as part of your dbt project, in plain SQL.</em></p>
+
+[![CI](https://github.com/exasol-labs/dbt-exasol-semantic-views/actions/workflows/ci.yml/badge.svg)](https://github.com/exasol-labs/dbt-exasol-semantic-views/actions/workflows/ci.yml)
+[![dbt](https://img.shields.io/badge/dbt-1.10%2B-FF694B?logo=dbt&logoColor=white)](https://docs.getdbt.com)
+[![Exasol Semantic Views](https://img.shields.io/badge/Exasol%20Semantic%20Views-0.6.1%2B-003865)](https://github.com/exasol-labs/exasol-semantic-views)
+[![License: MIT](https://img.shields.io/badge/license-MIT-blue)](LICENSE)
+
+**[Install](#install) · [Define a model](#define-a-semantic-model) · [Test it](#test-it) · [Query it](#query-it-from-a-dbt-model) · [Config](#config) · [Development](#development)**
+
+</div>
+
+---
 
 The semantic layer becomes part of the project: a model file per semantic
 model, written in the same SQL an administrator would run, with `ref()` for
