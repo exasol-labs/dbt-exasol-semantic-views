@@ -5,15 +5,15 @@
   session preprocessor nor rights to call the compiler at query time, and it
   answers with the model as built in this run:
 
-    -- depends_on: {{ ref('sales_semantic') }}
+    -- depends_on: {{ ref('orders_by_region') }}
     {{ exasol_semantic_views.query(
-         model='sales', object='SALES',
+         model='sales', object='ORDERS_BY_REGION',
          metrics=['total_revenue'], dimensions=['customer_region'],
          filters=[{'field': 'order_status', 'op': '=', 'value': 'COMPLETE'}]) }}
 
-  The `depends_on` comment orders the downstream model after the semantic
-  model's build; the compile happens at run time, so a ref() alone in the call
-  would not reach the parser.
+  The `depends_on` comment orders the downstream model after the view model
+  whose adopt() post-hook made the semantic view; the compile happens at run
+  time, so a ref() alone in the call would not reach the parser.
 
   query() takes the structured request -- COMPILE_REQUEST_JSON's closed contract:
   metrics, dimensions, filters, having, order_by, limit. compile_sql() takes a

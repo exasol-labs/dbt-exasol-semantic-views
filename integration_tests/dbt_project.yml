@@ -20,6 +20,12 @@ models:
       +materialized: table
     marts:
       +materialized: table
+    # A view model per semantic view, adopted into one ESV model. persist_docs
+    # writes the documented descriptions as the comments ADOPT_VIEW reads.
+    semantic:
+      +materialized: view
+      +persist_docs: {relation: true, columns: true}
+      +post-hook: "{{ exasol_semantic_views.adopt('esv_it_sales') }}"
 
 # Lets CI and the overrides tests exercise dispatch the way a user would.
 dispatch:
