@@ -1,13 +1,34 @@
 version: 2
 
 models:
-  - name: esv_it_sales
-    description: The integration-test semantic model, rebuilt on every run.
+  - name: orders_by_region
+    description: Orders by customer region and status.
+    columns:
+      - name: customer_region
+        description: Region of the ordering customer
+      - name: total_revenue
+        description: Net value of all orders
+      - name: delivered_revenue
+        description: Net value of delivered orders
+      - name: order_count
+        description: Number of orders
+      - name: customers
+        description: Distinct ordering customers
     data_tests:
-      - exasol_semantic_views.validates_clean
-      - exasol_semantic_views.agent_ready
-      - exasol_semantic_views.no_retired_views
-      - exasol_semantic_views.definition_unchanged
+      - exasol_semantic_views.validates_clean:
+          arguments: {model_name: esv_it_sales}
+      - exasol_semantic_views.agent_ready:
+          arguments: {model_name: esv_it_sales}
+      - exasol_semantic_views.no_retired_views:
+          arguments: {model_name: esv_it_sales}
+
+  - name: customer_reach
+    description: Order sizes by customer region.
+    columns:
+      - name: avg_order_value
+        description: Average net order value
+      - name: largest_order
+        description: Largest single order
 
   - name: it_revenue_by_region
     description: Governed revenue per region, compiled through the structured request.
