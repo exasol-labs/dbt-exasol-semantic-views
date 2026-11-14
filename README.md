@@ -2,7 +2,7 @@
 
 <h1>exasol_semantic_views</h1>
 
-<p><em>A dbt package for <a href="https://github.com/exasol-labs/exasol-semantic-views">Exasol Semantic Views</a>.<br>Turn dbt view models into a governed semantic layer, test it, and query it — in plain SQL.</em></p>
+<p><em>Your semantic layer, defined in dbt.<br>Write a view you already know how to write — get governed metrics that are right at every grain, for BI tools, SQL users and AI agents alike.</em></p>
 
 [![CI](https://github.com/exasol-labs/dbt-exasol-semantic-views/actions/workflows/ci.yml/badge.svg)](https://github.com/exasol-labs/dbt-exasol-semantic-views/actions/workflows/ci.yml)
 [![dbt](https://img.shields.io/badge/dbt-1.10%2B-FF694B?logo=dbt&logoColor=white)](https://docs.getdbt.com)
@@ -15,14 +15,43 @@
 
 ---
 
-A semantic view is a dbt view model you already know how to write: an
-aggregate over one table. One post-hook adopts it into Exasol Semantic Views —
-its plain columns become dimensions, its aggregates metrics, its table the
-entity, and the descriptions in your YAML its documentation. The view stays
-plain SQL that anyone can run; the semantic view adds what a view cannot:
-correct answers at any coarser grain (`COUNT(DISTINCT)`, `AVG` and ratios
-regroup from the source rows), agent discovery, the metric catalog, Semantic
-SQL and governance.
+Most semantic layers ask you to learn a new modelling language: a YAML spec, a
+separate service to run, and a second copy of your business logic that slowly
+drifts from the warehouse. This package goes the other way. **A semantic view
+is a dbt view model** — plain SQL over one table, documented in the YAML you
+already keep. Add one post-hook, and
+[Exasol Semantic Views](https://github.com/exasol-labs/exasol-semantic-views)
+turns it into governed metrics, inside the database:
+
+```sql
+-- models/semantic/shipping.sql: adopted as a semantic view on every dbt build
+select ship_mode,
+       sum(freight_amount)         as freight,
+       count(distinct customer_id) as customers
+from {{ ref('orders') }}
+group by ship_mode
+```
+
+What that gives you that a view on its own cannot:
+
+- **Right at every grain.** Ask for `customers` across all ship modes and a
+  customer who shipped by air and by sea is counted once — not twice, as
+  adding up the view's rows would. `COUNT(DISTINCT)`, averages and ratios are
+  recomputed from the source rows at whatever grain someone asks for, so
+  nobody double-counts by accident.
+- **One definition for every consumer.** BI tools, SQL users and AI agents
+  query the same governed metrics, with the descriptions from your dbt docs.
+  Agents can discover what exists and get an answer, or a clear refusal, instead
+  of guessing at joins.
+- **Governed where the data lives.** Validation, publication, discovery and
+  access control run in Exasol itself. There is no sidecar service to deploy,
+  and no second copy of the logic to keep in sync.
+- **Your whole semantic layer, in one dbt project, in plain SQL.** The view
+  is the definition, versioned and reviewed like any other model, and
+  rebuilt with `dbt build`. The rest of the layer — relationships between
+  entities, data fusion across sources, grants — is Exasol Semantic Views SQL
+  too, so it can live in the same project and run from the same hooks. Nothing
+  new to learn, nothing extra to run.
 
 **Supported warehouse: Exasol only**, through
 [dbt-exasol](https://github.com/exasol/dbt-exasol) 1.10 or later. Requires
