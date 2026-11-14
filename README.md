@@ -6,7 +6,7 @@
 
 [![CI](https://github.com/exasol-labs/dbt-exasol-semantic-views/actions/workflows/ci.yml/badge.svg)](https://github.com/exasol-labs/dbt-exasol-semantic-views/actions/workflows/ci.yml)
 [![dbt](https://img.shields.io/badge/dbt-1.10%2B-FF694B?logo=dbt&logoColor=white)](https://docs.getdbt.com)
-[![Exasol Semantic Views](https://img.shields.io/badge/Exasol%20Semantic%20Views-0.7.0%2B-003865)](https://github.com/exasol-labs/exasol-semantic-views)
+[![Exasol Semantic Views](https://img.shields.io/badge/Exasol%20Semantic%20Views-0.7.1%2B-003865)](https://github.com/exasol-labs/exasol-semantic-views)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue)](LICENSE)
 
 **[Install](#install) · [Define a semantic view](#define-a-semantic-view) · [Test it](#test-it) · [Query it](#query-it-from-a-dbt-model) · [Development](#development)**
@@ -26,7 +26,7 @@ SQL and governance.
 
 **Supported warehouse: Exasol only**, through
 [dbt-exasol](https://github.com/exasol/dbt-exasol) 1.10 or later. Requires
-exasol-semantic-views **0.7.0** or later; the package checks at run time and
+exasol-semantic-views **0.7.1** or later; the package checks at run time and
 names what is missing.
 
 ## Install

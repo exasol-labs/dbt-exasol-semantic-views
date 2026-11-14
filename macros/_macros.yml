@@ -6,7 +6,7 @@ macros:
       The post-hook that makes a view model a semantic view. Renders
       `EXECUTE SCRIPT SEMANTIC_ADMIN.ADOPT_VIEW('<esv_model>', '<this.schema>',
       '<this.identifier>')`, after checking that the database has
-      exasol-semantic-views 0.7.0 or later. The view must be an aggregate over
+      exasol-semantic-views 0.7.1 or later. The view must be an aggregate over
       one table; ADOPT_VIEW creates the model when absent, validates and
       publishes it, and raises on any refusal, failing the node. Dispatched.
     arguments:
