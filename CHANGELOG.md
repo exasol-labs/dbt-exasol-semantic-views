@@ -2,8 +2,9 @@
 
 ## 0.2.0 - Unreleased
 
-A semantic view is now a dbt view model. Requires exasol-semantic-views 0.7.0
-or later.
+A semantic view is now a dbt view model. Requires exasol-semantic-views 0.7.1
+or later, the first release of ADOPT_VIEW with a published bundle (the
+`v0.7.0` tag carries the same scripts, but its release build failed).
 
 **Breaking.** The `exasol_semantic_model` materialization is gone, and with it
 `split_statements`, `prepare_statement`, `relation_args`, the

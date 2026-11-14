@@ -22,7 +22,7 @@ jobs:
       fail-fast: false
       matrix:
         # The oldest exasol-semantic-views release the package supports, and the newest.
-        esv-ref: ["v0.7.0", "main"]
+        esv-ref: ["v0.7.1", "main"]
     env:
       EXASOL_HOST: 127.0.0.1
       EXASOL_PORT: "8563"

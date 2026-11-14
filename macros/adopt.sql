@@ -52,7 +52,7 @@
   {%- set lacking = needed | reject('in', have) | list -%}
   {%- if lacking | length > 0 -%}
     {{ exceptions.raise_compiler_error(
-         "exasol_semantic_views needs exasol-semantic-views 0.7.0 or later; this database"
+         "exasol_semantic_views needs exasol-semantic-views 0.7.1 or later; this database"
          ~ " lacks SEMANTIC_ADMIN." ~ (lacking | join(', SEMANTIC_ADMIN.'))
          ~ ". Install a newer release, or check that this user can see SEMANTIC_ADMIN.") }}
   {%- endif -%}
