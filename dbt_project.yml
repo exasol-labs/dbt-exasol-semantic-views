@@ -1,5 +1,5 @@
 name: exasol_semantic_views
-version: '0.1.0'
+version: '0.2.0'
 config-version: 2
 
 # dbt-exasol 1.12 pins dbt-core 1.12. The upper bound admits dbt v2 so the
